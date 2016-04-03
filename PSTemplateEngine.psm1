@@ -1,12 +1,12 @@
 ﻿#Requires -Version 5
-function Invoke-ProcessTemplate {
+function Invoke-ProcessTemplateFile {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]$Template
+        [Parameter(Mandatory=$true)]$TemplateFile
         #,$Data
     )
 
-    $TemplateAsSingleString = Get-Content $Template | Out-String
+    $TemplateAsSingleString = Get-Content $TemplateFile | Out-String
     $TemplateHereString = @"
 @"
 $TemplateAsSingleString
@@ -15,7 +15,7 @@ $TemplateAsSingleString
 
     $TemplateAfterProcessing = Invoke-Expression $TemplateHereString
 
-    Compare-Object $($TemplateAsSingleString -split '\n') $($TemplateAfterProcessing -split '\n') | fl * | Out-String -Stream | Write-Verbose
+    Compare-Object $($TemplateAfterProcessing -split '\n') $($TemplateAsSingleString -split '\n') | fl * | Out-String -Stream | Write-Verbose
 
     $TemplateAfterProcessing
 }
