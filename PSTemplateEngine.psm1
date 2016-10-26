@@ -2,11 +2,19 @@
 function Invoke-ProcessTemplateFile {
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory=$true)]$TemplateFile
-        #,$Data
+        [Parameter(Mandatory,ValueFromPipeline)]$TemplateFile
     )
 
-    $TemplateAsSingleString = Get-Content $TemplateFile | Out-String
+    Get-Content $TemplateFile | Invoke-ProcessTemplate
+}
+
+Function Invoke-ProcessTemplate {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory,ValueFromPipeline)][String]$TemplateContent
+    )
+    
+    $TemplateAsSingleString = $TemplateContent | Out-String
     $TemplateHereString = @"
 @"
 $TemplateAsSingleString
