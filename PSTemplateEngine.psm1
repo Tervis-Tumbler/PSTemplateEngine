@@ -17,8 +17,7 @@ Function Invoke-ProcessTemplate {
     $TemplateAsSingleString = $TemplateContent | Out-String
     $TemplateHereString = @"
 @"
-$TemplateAsSingleString
-"`@
+$TemplateAsSingleString"`@
 "@
 
     $TemplateAfterProcessing = Invoke-Expression $TemplateHereString
