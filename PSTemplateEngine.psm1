@@ -5,7 +5,7 @@ function Invoke-ProcessTemplateFile {
         [Parameter(Mandatory,ValueFromPipeline)]$TemplateFile
     )
 
-    Get-Content $TemplateFile | Out-String | Invoke-ProcessTemplate
+    ([IO.File]::ReadAllText($TemplateFile)) | Invoke-ProcessTemplate
 }
 
 Function Invoke-ProcessTemplate {

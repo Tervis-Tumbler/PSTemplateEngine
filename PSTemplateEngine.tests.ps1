@@ -1,35 +1,34 @@
 ﻿Import-Module -Force PSTemplateEngine
 
 Describe "Template processing" {
-    $TemplateFile = "$TestDrive\Test.pstemplate"
+    $TemplateFile = "$Home\TestDrive\Test.pstemplate"
 @"
 This is a template
 `$Var
-"@ | Out-File $TemplateFile -Force
-    
-    it "compares template" {
+"@ | Out-File $TemplateFile -Force -Encoding default -NoNewline
 
-        Get-Content -Path $TemplateFile | Should Be @"
+    it "Confirm template file is the same as here string" {
+
+    ([IO.File]::ReadAllText($TemplateFile)) | Should Be @"
 This is a template
 `$Var
 "@
 }
 
-    it "Inovoke-ProcessTemplateFile" {
-        get-content $TemplateFile
-        Set-Variable -Name var -Value "hello"
-
+    it "Inovoke-ProcessTemplateFile using locally scoped variable" {
+        $Var = "hello"
         Invoke-ProcessTemplateFile -TemplateFile $TemplateFile | Should Be @"
 This is a template
 hello
 "@ 
     }
+
     it "Inovoke-ProcessTemplateFile global scope variable" {
-        $Global:Var = "Hello"       
+        $Global:Var = "goodbye"       
 
         Invoke-ProcessTemplateFile -TemplateFile $TemplateFile | Should Be @"
 This is a template
-hello
+goodbye
 "@ 
 
     }
