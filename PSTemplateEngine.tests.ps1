@@ -9,14 +9,14 @@ This is a template
 
     it "Confirm template file is the same as here string" {
 
-    ([IO.File]::ReadAllText($TemplateFile)) | Should Be @"
+    Get-Content $TemplateFile -Raw | Should Be @"
 This is a template
 `$Var
 "@
 }
 
     it "Inovoke-ProcessTemplateFile using locally scoped variable" {
-        $Var = "hello"
+        $Script:Var = "hello"
         Invoke-ProcessTemplateFile -TemplateFile $TemplateFile | Should Be @"
 This is a template
 hello
