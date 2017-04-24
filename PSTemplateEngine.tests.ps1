@@ -93,9 +93,9 @@ This is a template
 `$Var
 `$Var2
 `$(
-foreach (`$Number in 1..`$Total) {
-    "Computer`$Number`r`n"
-}
+    foreach (`$Number in 1..`$Total) {
+        "Computer`$Number`r`n"
+    }
 )
 "@ 
     $TemplateContent | Out-File $TemplateFile -Force -Encoding default -NoNewline
