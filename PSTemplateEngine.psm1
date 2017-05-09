@@ -33,7 +33,8 @@ $TemplateAsSingleString"`@
 function Invoke-ProcessTemplatePath {
     param (
         [Parameter(Mandatory)]$Path,
-        [Parameter(Mandatory)]$DestinationPath
+        [Parameter(Mandatory)]$DestinationPath,
+        [HashTable]$TemplateVariables
     )
     $TemplateFiles = Get-ChildItem -Recurse -Path $Path -Include "*.pstemplate" -File
     foreach ($TemplateFile in $TemplateFiles) {
@@ -42,7 +43,7 @@ function Invoke-ProcessTemplatePath {
         $DestinationPathOfFile = "$DestinationPath\$RelativeDestinationPath"
         New-Item -ItemType Directory -Force -Path $DestinationPathOfFile | Out-Null
 
-        Invoke-ProcessTemplateFile -TemplateFile $TemplateFile |
+        Invoke-ProcessTemplateFile -TemplateFile $TemplateFile -TemplateVariables $TemplateVariables |
         Out-File -Encoding ascii -FilePath "$DestinationPath\$RelativeDestinationPath\$DestinationFileName"
     }
 }
