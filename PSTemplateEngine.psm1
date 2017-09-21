@@ -48,15 +48,6 @@ function Invoke-ProcessTemplatePath {
     }
 }
 
-function ConvertTo-Variable {
-    param (
-        [Parameter(ValueFromPipeline)][HashTable]$HashTableToConvert
-    )
-    foreach ($Key in $HashTableToConvert.Keys) {
-        New-Variable -Name $Key -Value $HashTableToConvert[$Key] -Force -Scope 1
-    }
-}
-
 function Get-ModuleScopedVariables {
     Get-Variable
 }
