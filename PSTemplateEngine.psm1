@@ -47,7 +47,3 @@ function Invoke-ProcessTemplatePath {
         Out-File -Encoding ascii -FilePath "$DestinationPath\$RelativeDestinationPath\$DestinationFileName"
     }
 }
-
-function Get-ModuleScopedVariables {
-    Get-Variable
-}
