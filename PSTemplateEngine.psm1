@@ -15,19 +15,28 @@ Function Invoke-ProcessTemplate {
         [Parameter(Mandatory,ValueFromPipeline)][String]$TemplateContent,
         [HashTable]$TemplateVariables
     )
-    $TemplateVariables | ConvertTo-Variable
-    
-    $TemplateAsSingleString = $TemplateContent | Out-String
-    $TemplateHereString = @"
+    begin {
+        $OFSBeforeFunctionCall = $OFS
+        $OFS = ""
+    }
+    process {
+        $TemplateVariables | ConvertTo-Variable
+        
+        $TemplateAsSingleString = $TemplateContent | Out-String
+        $TemplateHereString = @"
 @"
 $TemplateAsSingleString"`@
 "@
 
-    $TemplateAfterProcessing = Invoke-Expression $TemplateHereString
+        $TemplateAfterProcessing = Invoke-Expression $TemplateHereString
 
-    Compare-Object $($TemplateAfterProcessing -split '\n') $($TemplateAsSingleString -split '\n') | fl * | Out-String -Stream | Write-Verbose
+        Compare-Object $($TemplateAfterProcessing -split '\n') $($TemplateAsSingleString -split '\n') | fl * | Out-String -Stream | Write-Verbose
 
-    $TemplateAfterProcessing
+        $TemplateAfterProcessing
+    }
+    end {
+        $OFS = $OFSBeforeFunctionCall
+    }
 }
 
 function Invoke-ProcessTemplatePath {
@@ -45,5 +54,16 @@ function Invoke-ProcessTemplatePath {
 
         Invoke-ProcessTemplateFile -TemplateFile $TemplateFile -TemplateVariables $TemplateVariables |
         Out-File -Encoding ascii -FilePath "$DestinationPath\$RelativeDestinationPath\$DestinationFileName"
+    }
+}
+
+function ConvertTo-Variable {
+    param (
+        [Parameter(ValueFromPipeline)][HashTable]$HashTableToConvert
+    )
+    process {
+        foreach ($Key in $HashTableToConvert.Keys) {
+            New-Variable -Name $Key -Value $HashTableToConvert[$Key] -Force -Scope 1
+        }
     }
 }
