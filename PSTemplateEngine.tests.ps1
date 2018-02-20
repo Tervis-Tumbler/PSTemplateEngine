@@ -1,7 +1,7 @@
 ﻿Import-Module -Force PSTemplateEngine
 
 Describe "Template processing single variable" {
-    $TemplateFile = "$Home\TestDrive\Test.pstemplate"
+    $TemplateFile = "TestDrive:\Test.pstemplate"
     $TemplateContent = @"
 This is a template
 `$Var
@@ -63,7 +63,7 @@ goodbye
 }
 
 Describe "Template processing multi variable" {
-    $TemplateFile = "$Home\TestDrive\Test.pstemplate"
+    $TemplateFile = "TestDrive:\Test.pstemplate"
     $TemplateContent = @"
 This is a template
 `$Var
@@ -87,14 +87,14 @@ goodbye
 }
 
 Describe "Template processing multi variable and sub expression" {
-    $TemplateFile = "$Home\TestDrive\Test.pstemplate"
+    $TemplateFile = "TestDrive:\Test.pstemplate"
     $TemplateContent = @"
 This is a template
 `$Var
 `$Var2
 `$(
     foreach (`$Number in 1..`$Total) {
-        "Computer`$Number`r`n"
+        "Computer`$Number`$(if (`$Number -ne `$Total) {[System.Environment]::NewLine})"
     }
 )
 "@ 
