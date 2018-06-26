@@ -53,7 +53,7 @@ function Invoke-ProcessTemplatePath {
         New-Item -ItemType Directory -Force -Path $DestinationPathOfFile | Out-Null
 
         Invoke-ProcessTemplateFile -TemplateFile $TemplateFile -TemplateVariables $TemplateVariables |
-        Out-File -Encoding ascii -FilePath "$DestinationPath\$RelativeDestinationPath\$DestinationFileName"
+        Out-File -Encoding ascii -NoNewline -FilePath "$DestinationPath\$RelativeDestinationPath\$DestinationFileName"
     }
 }
 
